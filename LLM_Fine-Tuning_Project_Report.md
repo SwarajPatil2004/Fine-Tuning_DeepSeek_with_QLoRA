@@ -101,3 +101,58 @@ An **adapter** is a tiny add-on to the base model. It's like a USB stick:
 - Adapter 1: College policies
 - Adapter 2: Lab safety (same base, different adapter)
 - You can swap adapters depending on what you need.
+
+---
+
+## 4. The Approach: Small Model First → Scale to 7B
+
+### Why Start Small?
+
+A **safe, step-by-step approach**:
+
+1. **Phase 1 (Dry-Run)**: Train on 1.5B model
+   - Fast (1–2 hours on Kaggle T4)
+   - Catches data/code errors early
+   - Uses ~3 GB memory
+   - No risk of wasting 10 hours on setup bugs
+
+2. **Phase 2 (Production)**: Scale to 7B
+   - Better reasoning, longer context
+   - Same code, just change `BASE_MODEL` in config
+   - Takes 8–12 hours on Kaggle T4
+   - You know the pipeline works
+
+### Model Selection
+| Model | Size | Best For | Memory (QLoRA) |
+|-------|------|----------|---|
+| **DeepSeek-R1-Distill-Qwen-1.5B** | 1.5B | Dry-run, quick testing | ~3 GB |
+| **DeepSeek-R1-Distill-Qwen-7B** | 7B | Final production | ~9 GB |
+| **DeepSeek-R1-Distill-Qwen-32B** | 32B | NOT recommended (Expensive) | 16+ GB |
+
+**For this project:**
+- Start with **1.5B** on Kaggle (free, low risk)
+- Validate everything works
+- Switch to **7B** with same code (only change config)
+
+---
+
+## 5. Your Domain: College/Lab SOP Assistant
+
+### Recommended Use Case (Pune Context)
+A **STEM college lab** or **student club** needs an AI assistant for:
+
+| SOP Category | Example Questions | Answer Structure |
+|---------|----------|---------|
+| **Lab Safety** | "Can I use the fume hood alone?" | Eligibility → Safety Rules → Who Supervises |
+| **Equipment Booking** | "How do I book the spectrophotometer?" | Availability → Booking Steps → Cancellation Policy |
+| **Reimbursement** | "How do I get refunded for lab supplies?" | Eligibility → Required Documents → Timeline → Approval Chain |
+| **Attendance & Leave** | "What counts as excused absence?" | Leave Types → Approval Process → Documentation |
+| **Event Approvals** | "Can I organize a guest lecture?" | Event Planning → Approval Steps → Budget Limits |
+
+### Why This is Strong
+- ✅ **Real need**: Teams spend hours answering these repeatedly.
+- ✅ **Free data**: You write SOPs or use public college policies.
+- ✅ **Measurable success**: Ask peers if answers are better/faster than before.
+- ✅ **Shareable**: Other students can use the same assistant.
+
+---
